@@ -19,6 +19,11 @@ mod._styles = {
     "none",
 }
 
+mod._player_salvage_styles = {
+    "text",
+    "icon",
+}
+
 mod._symbols = {
     aquila = "\xEE\x80\xAE",
     damage = "\xEE\x80\xA6",
@@ -27,6 +32,7 @@ mod._symbols = {
     level = "\xEE\x80\x86",
     penance = "\xEE\x81\x81",
     rating = "\xEE\x80\x9F",
+    salvage = "\xEE\x81\x93",
     shock = "\xEE\x80\xA7",
     skull = "\xEE\x80\x9E",
     star = "\xEE\x80\xAA",
@@ -53,6 +59,27 @@ local loc = {
         ["zh-cn"] = "启用升级通知",
         ["zh-tw"] = "啟用升級通知",
         ru = "Включить уведомление о повышении уровня",
+    },
+    layer_salvage_style = {
+        en = "Player Salvage Style",
+        ja = "プレイヤーサルベージのスタイル",
+        ["zh-cn"] = "玩家回收物样式",
+        ["zh-tw"] = "玩家回收物樣式",
+        ru = "Стиль отображения ресурсов игрока",
+    },
+    player_salvage_style_text = {
+        en = "Amount " .. Localize("loc_expeditions_currency_name_hud") .. " ",
+        ja = Localize("loc_expeditions_currency_name_hud") .. "の量 ",
+        ["zh-cn"] = Localize("loc_expeditions_currency_name_hud") .. "数量 ",
+        ["zh-tw"] = Localize("loc_expeditions_currency_name_hud") .. "數量 ",
+        ru = "Количество " .. Localize("loc_expeditions_currency_name_hud") .. " ",
+    },
+    player_salvage_style_icon = {
+        en = "Amount " .. " ",
+        ja = "数量 ",
+        ["zh-cn"] = "数量 ",
+        ["zh-tw"] = "數量 ",
+        ru = "Количество ",
     },
     global = {
         en = "Global",
