@@ -4,6 +4,11 @@ local option_tables = {
     style = {},
     color = {},
     symbol = {},
+    player_salvage_style = {
+        { text = "player_salvage_style_text", value = "text" },
+        { text = "player_salvage_style_icon", value = "icon" },
+        { text = "off", value = "off" },
+    },
     toggle = {
         { text = "on", value = "on" },
         { text = "off", value = "off" },
@@ -227,6 +232,15 @@ for i, ele in ipairs(mod._elements) do
             },
         }
     }
+
+    if ele == "team_panel" then
+        table.insert(widgets[#widgets].sub_widgets, {
+            setting_id = "player_salvage_style",
+            type = "dropdown",
+            default_value = "text",
+            options = table.clone(option_tables.player_salvage_style),
+        })
+    end
 end
 
 widgets[#widgets + 1] = {
