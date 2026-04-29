@@ -19,6 +19,11 @@ mod._styles = {
     "none",
 }
 
+mod._player_salvage_styles = {
+    "text",
+    "icon",
+}
+
 mod._symbols = {
     aquila = "\xEE\x80\xAE",
     damage = "\xEE\x80\xA6",
@@ -27,11 +32,15 @@ mod._symbols = {
     level = "\xEE\x80\x86",
     penance = "\xEE\x81\x81",
     rating = "\xEE\x80\x9F",
+    salvage = "\xEE\x81\x93",
     shock = "\xEE\x80\xA7",
     skull = "\xEE\x80\x9E",
     star = "\xEE\x80\xAA",
     none = ""
 }
+
+local salvage_icon = mod._symbols.salvage
+local salvage_text = Localize("loc_expeditions_currency_name_hud")
 
 local loc = {
     mod_name = {
@@ -53,6 +62,34 @@ local loc = {
         ["zh-cn"] = "启用升级通知",
         ["zh-tw"] = "啟用升級通知",
         ru = "Включить уведомление о повышении уровня",
+    },
+    player_salvage_style = {
+        en = "Player Salvage Style",
+        ja = "プレイヤーサルベージのスタイル",
+        ["zh-cn"] = "玩家回收物样式",
+        ["zh-tw"] = "玩家回收物樣式",
+        ru = "Стиль утиля игрока",
+    },
+    player_salvage_style_text = {
+        en = "Amount " .. salvage_text .. " " .. salvage_icon,
+        ja = "数量 " .. salvage_text .. " " .. salvage_icon,
+        ["zh-cn"] = "数量 " .. salvage_text .. " " .. salvage_icon,
+        ["zh-tw"] = "数量 " .. salvage_text .. " " .. salvage_icon,
+        ru = "Количество " .. salvage_text .. " " .. salvage_icon,
+    },
+    player_salvage_style_icon = {
+        en = "Amount " .. salvage_icon,
+        ja = "数量 " .. salvage_icon,
+        ["zh-cn"] = "数量 " .. salvage_icon,
+        ["zh-tw"] = "數量 " .. salvage_icon,
+        ru = "Количество " .. salvage_icon,
+    },
+    player_salvage_color = {
+        en = "Player Salvage Color",
+        ja = "プレイヤーサルベージの色",
+        ["zh-cn"] = "玩家回收物颜色",
+        ["zh-tw"] = "玩家回收物顏色",
+        ru = "Цвет утиля игрока",
     },
     global = {
         en = "Global",
