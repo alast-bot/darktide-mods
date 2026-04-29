@@ -118,11 +118,23 @@ local _player_salvage_amount = function(game_mode, player)
 end
 
 local _player_salvage_text = function(style, salvage_amount)
+    local text = ""
+
     if style == "text" then
-        return "| " .. tostring(salvage_amount) .. " " .. SALVAGE_NAME .. " " .. SALVAGE_SYMBOL
+        text = "| " .. tostring(salvage_amount) .. " " .. SALVAGE_NAME .. " " .. SALVAGE_SYMBOL
+    else
+        text = "| " .. tostring(salvage_amount) .. " " .. SALVAGE_SYMBOL
     end
 
-    return "| " .. tostring(salvage_amount) .. " " .. SALVAGE_SYMBOL
+    local color_code = mod:get("player_salvage_color")
+
+    if color_code and color_code ~= "default" and Color[color_code] then
+        local c = Color[color_code](255, true)
+
+        text = string.format("{#color(%s,%s,%s)}", c[2], c[3], c[4]) .. text .. "{#reset()}"
+    end
+
+    return text
 end
 
 local _append_player_salvage = function(panel, player, game_mode, style)
@@ -180,17 +192,11 @@ local _append_player_salvage = function(panel, player, game_mode, style)
     return true
 end
 
-local _switch_level_feature = function(self)
+local _toggle_level_display = function(self)
     self._supported_features.level = mod.is_enabled_feature(ref)
 end
 
-local _hide_vanilla_salvage_when_replaced = function(self)
-    if _salvage_enabled(_expedition_game_mode()) then
-        _hide_vanilla_salvage(self, true)
-    end
-end
-
-local _sync_vanilla_salvage_display = function(self)
+local _toggle_salvage_display = function(self)
     local game_mode = _expedition_game_mode()
 
     if _salvage_enabled(game_mode) then
@@ -201,10 +207,13 @@ local _sync_vanilla_salvage_display = function(self)
     end
 end
 
-mod:hook_safe(CLASS.HudElementPersonalPlayerPanel, "update", _switch_level_feature)
-mod:hook_safe(CLASS.HudElementTeamPlayerPanel, "update", _switch_level_feature)
-mod:hook_safe(CLASS.HudElementPlayerPanelBase, "update", _sync_vanilla_salvage_display)
-mod:hook_safe(CLASS.HudElementPlayerPanelBase, "_set_expedition_currency_display", _hide_vanilla_salvage_when_replaced)
+local _toggle_vanilla_features = function(self)
+    _toggle_level_display(self)
+    _toggle_salvage_display(self)
+end
+
+mod:hook_safe(CLASS.HudElementPersonalPlayerPanel, "update", _toggle_vanilla_features)
+mod:hook_safe(CLASS.HudElementTeamPlayerPanel, "update", _toggle_vanilla_features)
 
 -- hub
 

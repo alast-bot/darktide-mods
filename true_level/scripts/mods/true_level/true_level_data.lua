@@ -234,11 +234,21 @@ for i, ele in ipairs(mod._elements) do
     }
 
     if ele == "team_panel" then
-        table.insert(widgets[#widgets].sub_widgets, {
-            setting_id = "player_salvage_style",
-            type = "dropdown",
-            default_value = "text",
-            options = table.clone(option_tables.player_salvage_style),
+        table.append(widgets[#widgets].sub_widgets, {
+            {
+                setting_id = "player_salvage_style",
+                type = "dropdown",
+                default_value = "text",
+                options = table.clone(option_tables.player_salvage_style),
+                sub_widgets = {
+                    {
+                        setting_id = "player_salvage_color",
+                        type = "dropdown",
+                        default_value = "default",
+                        options = table.clone(option_tables.color),
+                    }
+                }
+            },
         })
     end
 end
