@@ -3,8 +3,8 @@ local mod = get_mod("DPSMeter")
 mod._info = {
     title = "DPS Meter",
     author = "Zombine",
-    date = "2025/06/27",
-    version = "1.1.2",
+    date = "2026/06/24",
+    version = "1.1.3",
 }
 mod:info("Version " .. mod._info.version)
 
@@ -40,7 +40,7 @@ end
 
 mod.cleanup_health_table = function(self)
     for unit, _ in pairs(self._health_table) do
-        if not ALIVE[unit] or unit.__deleted then
+        if not ALIVE[unit] then
             self._health_table[unit] = nil
         end
     end
