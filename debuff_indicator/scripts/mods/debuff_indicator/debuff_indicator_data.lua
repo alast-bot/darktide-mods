@@ -129,25 +129,47 @@ for _, buff_name in ipairs(mod.buff_names) do
     end
 end
 
+local excluded_keywords = {
+    electrocuted_arc = true,
+	electrocuted_arc_ability = true,
+    electrocuted_arc_grenade = true,
+    electrocuted_chain_lightning = true,
+    electrocuted_shock_mine = true,
+}
+
 for _, keyword in ipairs(mod.keywords) do
-    widgets_debuff[#widgets_debuff + 1] = {
-        setting_id = "group_" .. keyword,
-        type = "group",
-        sub_widgets = {
-            {
-                setting_id = "enable_" .. keyword,
-                type = "checkbox",
-                default_value = true
-            },
-            {
-                setting_id = "color_" .. keyword,
-                type = "dropdown",
-                default_value = "white_smoke",
-                options = table.clone(color_option)
-            }
-        }
-    }
+    if not excluded_keywords[keyword] then
+		widgets_debuff[#widgets_debuff + 1] = {
+			setting_id = "group_" .. keyword,
+			type = "group",
+			sub_widgets = {
+				{
+					setting_id = "enable_" .. keyword,
+					type = "checkbox",
+					default_value = true
+				},
+				{
+					setting_id = "color_" .. keyword,
+					type = "dropdown",
+					default_value = "white_smoke",
+					options = table.clone(color_option)
+				}
+			}
+		}
+	end
 end
+
+local function move_up_in_debuff_list(t, setting_id)
+    for i, widget in ipairs(t) do
+        if widget.setting_id == "group_" .. setting_id then
+            table.remove(t, i)
+            table.insert(t, 10, widget)
+            return
+        end
+    end
+end
+
+move_up_in_debuff_list(widgets_debuff, "electrocuted")
 
 widgets[#widgets + 1] = {
     setting_id = "debuff_and_dot",
@@ -205,9 +227,7 @@ local _type_by_tags = function(tags)
 end
 
 for breed_name, breed in pairs(Breeds) do
-    if breed_name ~= "chaos_plague_ogryn_sprayer" and
-       breed.display_name ~= "loc_breed_display_name_undefined" and
-       not mod.mutators[breed.name] then
+    if breed.display_name ~= "loc_breed_display_name_undefined" and not mod.mutators[breed.name] then
         local default_value = _is_special_enemy(breed.smart_tag_target_type)
         local type = _type_by_tags(breed.tags)
         local index = table.find_by_key(widgets_breed, "type", type)

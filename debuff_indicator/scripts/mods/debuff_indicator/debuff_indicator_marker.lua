@@ -246,19 +246,20 @@ local _add_buff_and_debuff_by_keywords = function(buff_ext, keywords)
     for keyword, _ in pairs(keywords) do
         local can_display = false
         local is_important = table.find(mod.keywords, keyword)
+        local parent_name = mod.merged_buffs[keyword]
+        local display_key = parent_name or keyword
 
-        if mod:get("enable_" .. keyword) or
+        if mod:get("enable_" .. display_key) or
            not mod:get("enable_filter") and not is_important then
             can_display = true
         end
 
-        if can_display and not buff_texts[keyword] then
-            local display_name = is_important and mod:localize(keyword) or keyword
-            local stacks = 0
+        if can_display and not buff_texts[display_key] then
+            local display_name = mod:localize(display_key)
 
-            buff_texts[keyword] = {
+            buff_texts[display_key] = {
                 display_name = display_name,
-                stacks = stacks
+                stacks = 0
             }
         end
     end

@@ -4,6 +4,7 @@ local Breeds = require("scripts/settings/breed/breeds")
 mod.buff_names = {
     -- DoT
     "bleed",
+	"bleed_long",
     "flamer_assault",
     "rending_debuff",
     "warp_fire",
@@ -11,6 +12,7 @@ mod.buff_names = {
 	"neurotoxin_interval_buff2",
 	"neurotoxin_interval_buff3",
 	"exploding_toxin_interval_buff",
+	"phosphor_burn",
     -- Weapons/Blessings
     "increase_impact_received_while_staggered",
     "increase_damage_received_while_staggered",
@@ -34,17 +36,26 @@ mod.buff_names = {
     "adamant_drone_talent_debuff",
     "adamant_melee_weakspot_hits_count_as_stagger_debuff",
     "adamant_staggered_enemies_deal_less_damage_debuff",
-    "adamant_staggering_increases_damage_taken",
+	"adamant_staggering_enemies_take_more_damage",
 	-- Broker
 	"broker_punk_rage_improved_shout_debuff",
 	"toxin_damage_debuff",
 	"toxin_damage_debuff_monster",
+	"broker_passive_toxin_infected_enemies_take_increased_damage_debuff",
+	-- Cryptic
+	"cryptic_servo_skull_debuff",
+	"cryptic_overload_keystone_increase_damage_taken_debuff",
     -- "stagger",
     -- "suppression",
 }
 
 mod.keywords = {
-    "electrocuted"
+    "electrocuted",
+	"electrocuted_arc",
+	"electrocuted_arc_ability",
+	"electrocuted_arc_grenade",
+	"electrocuted_chain_lightning",
+	"electrocuted_shock_mine",
 }
 
 mod.merged_buffs = {
@@ -53,6 +64,11 @@ mod.merged_buffs = {
 	neurotoxin_interval_buff3 = "neurotoxin_interval_buff",
 	exploding_toxin_interval_buff = "neurotoxin_interval_buff",
 	toxin_damage_debuff_monster = "toxin_damage_debuff",
+	electrocuted_arc = "electrocuted",
+	electrocuted_arc_ability = "electrocuted",
+	electrocuted_arc_grenade = "electrocuted",
+	electrocuted_chain_lightning = "electrocuted",
+	electrocuted_shock_mine = "electrocuted",
 }
 
 mod.display_style_names = {
@@ -69,6 +85,9 @@ mod.mutators = {
     chaos_mutator_ritualist = "cultist_ritualist",
     cultist_mutant_mutator = "cultist_mutant",
 	renegade_flamer_mutator = "renegade_flamer",
+	nurgle_flies = true,
+	sand_vortex = true,
+	attack_valkyrie = true,
 }
 
 local loc = {
@@ -306,6 +325,10 @@ local loc = {
         ru = "Кровотечение",
         ["zh-tw"] = "流血",
     },
+    bleed_long = {
+        en = "Bleeding (long)",
+        ja = "出血（大）",
+    },
     flamer_assault = {
         en = "Burning",
         ja = "燃焼",
@@ -338,6 +361,10 @@ local loc = {
         en = "Chem Toxin",
         ja = "ケム毒",
 		["zh-cn"] = "化学毒素",
+	},
+    phosphor_burn = {
+        en = "Phosphor",
+        ja = "フォスフォロス",
 	},
     power_maul_sticky_tick = {
         en = "Shock",
@@ -397,7 +424,7 @@ local loc = {
     adamant_staggered_enemies_deal_less_damage_debuff = {
         en = Localize("loc_talent_adamant_staggered_enemies_deal_less_damage")
     },
-    adamant_staggering_increases_damage_taken = {
+    adamant_staggering_enemies_take_more_damage = {
         en = Localize("loc_talent_adamant_staggered_enemies_take_more_damage")
     },
     toxin_damage_debuff = {
@@ -409,6 +436,15 @@ local loc = {
     broker_punk_rage_improved_shout_debuff = {
         en = Localize("loc_talent_broker_ability_punk_rage_sub_3")
     },
+    broker_passive_toxin_infected_enemies_take_increased_damage_debuff = {
+        en = Localize("loc_talent_broker_passive_toxin_infected_enemies_take_increased_damage")
+    },
+	cryptic_servo_skull_debuff = {
+		en = Localize("loc_talent_cryptic_servo_skull")
+	},
+	cryptic_overload_keystone_increase_damage_taken_debuff = {
+		en = Localize("loc_talent_cryptic_overload_keystone_bigger_explosion")
+	},
     stagger = {
         en = Localize("loc_stagger")
     },
@@ -443,8 +479,14 @@ end
 
 for breed_name, breed in pairs(Breeds) do
     if breed_name ~= "human" and breed_name ~= "ogryn" and breed.display_name then
+        local display_name = Localize(breed.display_name)
+
+        if display_name:match("unlocalized") then
+            display_name = breed.display_name:gsub("loc_.+name_", "")
+        end
+
         loc[breed_name] = {
-            en = Localize(breed.display_name)
+            en = display_name
         }
     end
 end
