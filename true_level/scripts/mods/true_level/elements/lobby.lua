@@ -31,6 +31,8 @@ mod:hook_safe(CLASS.LobbyView, "_sync_player", function(self, unique_id, player)
     local is_waiting = slot and mod.is_ready(slot, ref)
 
     if is_waiting then
+        mod.watch_havoc_player(player)
+
         local profile = player:profile()
         local character_id = profile and profile.character_id
         local true_levels = mod.get_true_levels(character_id)
