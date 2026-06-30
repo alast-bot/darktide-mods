@@ -19,7 +19,7 @@ mod:hook_safe(CLASS.EndView, "_set_character_names", function(self)
     end
 
     local session_report_raw = session_report and session_report.eor
-    local participant_reports = session_report_raw and session_report_raw.team.participants
+    local participant_reports = session_report_raw and session_report_raw.team and session_report_raw.team.participants
     local spawn_slots = self._spawn_slots
 
     if spawn_slots then
@@ -33,43 +33,41 @@ mod:hook_safe(CLASS.EndView, "_set_character_names", function(self)
                 local content = widget.content
                 local character_name = content.character_name
                 local account_id = slot.account_id
-                local report = self:_get_participant_progression(participant_reports, account_id)
+                local report = participant_reports and self:_get_participant_progression(participant_reports, account_id)
                 local player_info = slot.player_info
-                local profile = player_info:profile()
+                local profile = player_info and player_info:profile()
                 local character_id = profile and profile.character_id
                 local true_levels, is_myself = mod.get_true_levels(character_id)
 
-                if account_id and true_levels and report and not mod._havoc_promises[account_id] then
+                if account_id and true_levels and report then
                     if mod.should_replace(ref) then
-                        -- update levels
                         local cache = is_myself and mod._self or mod._others
-                        local rank_promise = Managers.data_service.havoc:havoc_rank_cadence_high(account_id)
+                        local rank_promise = mod.fetch_havoc_rank(account_id)
                         local previous_levels = nil
 
                         rank_promise:next(function(havoc_rank_cadence_high)
-                            mod._havoc_promises[account_id] = nil
-
-
                             if is_myself and true_levels.true_level then
                                 previous_levels = table.clone(true_levels)
                             end
 
                             mod.cache_true_levels(cache, character_id, report, havoc_rank_cadence_high, account_id)
 
-                            if is_myself and previous_levels then
-                                true_levels = mod.get_true_levels(character_id)
-                                mod.debug.compare(previous_levels, true_levels)
+                            local updated_levels = mod.get_true_levels(character_id)
+
+                            if updated_levels then
+                                content.character_name = mod.replace_level(character_name, updated_levels, ref)
                             end
 
-                            -- level up notification
-                            if previous_levels and previous_levels.true_level < true_levels.true_level then
+                            if is_myself and previous_levels and updated_levels then
+                                mod.debug.compare(previous_levels, updated_levels)
+                            end
+
+                            if previous_levels and updated_levels and previous_levels.true_level < updated_levels.true_level then
                                 if mod:get("enable_level_up_notif") then
                                     mod._level_up = true
                                 end
                             end
                         end)
-
-                        mod._havoc_promises[account_id] = true
                     end
 
                     content.character_name = mod.replace_level(character_name, true_levels, ref)
