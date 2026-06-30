@@ -3,9 +3,10 @@ local PopupStyle = require("scripts/ui/view_elements/view_element_player_social_
 local UIRenderer = require("scripts/managers/ui/ui_renderer")
 local ref = "social_menu"
 
--- Social Menu
 mod:hook(CLASS.SocialMenuRosterView, "formatted_character_name", function(func, self, player_info)
     local character_name = func(self, player_info)
+
+    mod.watch_havoc_player_info(player_info)
 
     if mod.should_replace(ref) then
         local profile = player_info:profile()
@@ -20,11 +21,12 @@ mod:hook(CLASS.SocialMenuRosterView, "formatted_character_name", function(func, 
     return character_name
 end)
 
--- Selected Player Popup
 mod:hook_safe(CLASS.ViewElementPlayerSocialPopup, "_set_player_info", function(self, parent, player_info)
     if not mod.should_replace(ref) then
         return
     end
+
+    mod.watch_havoc_player_info(player_info)
 
     local profile = player_info:profile()
     local character_id = profile and profile.character_id
